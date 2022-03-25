@@ -27,8 +27,8 @@ class RepresentationGenerator:
         calc = Calculator(descriptors, ignore_3D=True)
         mols = [Chem.MolFromSmiles(p) for p in smile_list]
         mols_updated = [mol for mol in mols if isinstance(mol, Chem.Mol)]
-        refcodes = pd.Series([id[x] if isinstance(mols[x], Chem.Mol) else 'nan' for x in range(len(mols))])
-        refcodes = refcodes[refcodes != 'nan']
+        refcodes = pd.Series([id[x] if isinstance(mols[x], Chem.Mol) else np.nan for x in range(len(mols))])
+        refcodes = refcodes[refcodes != np.nan]
         return pd.DataFrame(calc.pandas(mols_updated, nproc=os.cpu_count())), refcodes
 
     def rdkit_descriptors_from_smiles(self, smile_list):
