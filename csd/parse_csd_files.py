@@ -4,8 +4,9 @@ import pandas as pd
 import re
 
 class PreprocessingCSD:
-    def __init__(self, raw_data_dir='./csd/raw_data'):
-        self.raw_dir = raw_data_dir
+    def __init__(self, save_output):
+        self.save_output = save_output
+        self.raw_dir = './csd/raw_data'
         self.txt_path, self.smi_path = self.find_csd_output_files()
 
     def find_csd_output_files(self):
@@ -99,8 +100,7 @@ class PreprocessingCSD:
             info = pd.DataFrame(columns=col_headers)
             reg = re.compile(r'REFCODE')
             matches = list(reg.finditer(data))
-            for i in range(len(matches)):
-                print('\r\t{}\t/\t{}\t\t\t'.format(i, len(matches)), end='')
+            for i in tqdm(range(len(matches)), nrows=80):
                 m_start = matches[i].start()
                 m_end = len(data)
                 if i < len(matches) - 1:
@@ -113,11 +113,5 @@ class PreprocessingCSD:
         smiles_no_salt = self.smi_to_df()
         raw_csd_output = self.txt_to_df()
         full_CSD_output = pd.merge(raw_csd_output, smiles_no_salt, on='REFCODE', how='inner')
+        if self.save_output: full_CSD_output.to_csv('./csd/processed/raw_csd_output.csv')
         return full_CSD_output
-
-    # def csd_files_to_df(self):
-    #     dir_list = os.listdir(self.raw_dir)
-    #     for file in list:
-    #         if '.txt' in file:
-    #             txt_df =
-    #     return None
