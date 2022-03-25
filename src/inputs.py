@@ -18,8 +18,8 @@ class RepresentationGenerator:
         self.raw_df = df
         # self.smiles = self.raw_df.SMILES
         # self.id = self.raw_df.REFCODE
-        self.smiles = self.raw_df.SMILES[0:1000]
-        self.id = self.raw_df.REFCODE[0:1000]
+        self.smiles = self.raw_df.SMILES[0:10]
+        self.id = self.raw_df.REFCODE[0:10]
         self.ml_set = self.gen_ml_set()
 
 

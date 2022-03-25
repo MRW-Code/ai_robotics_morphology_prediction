@@ -15,7 +15,7 @@ if __name__ == '__main__':
         csd_df = pd.read_csv('./csd/processed/clean_csd_output.csv')
 
     input_gen = RepresentationGenerator(csd_df, save_output=True)
-    inputs = input_gen.ml_set()
+    inputs = input_gen.ml_set
 
 
     print('done')
