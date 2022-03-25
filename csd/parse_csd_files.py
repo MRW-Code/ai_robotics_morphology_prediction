@@ -42,19 +42,17 @@ class PreprocessingCSD:
         lines = self.remove_salts(self.smi_path)
 
         # Generate empty df to hold data
-        col_headers = ['REFCODE', 'SMILES']
-        smiles_dataframe = pd.DataFrame(columns=col_headers)
+        refcodes = [None] * len(lines)
+        smiles = [None] * len(lines)
 
         # Loop all lines in the file and add variables to df where they should go
-        counter = 1
-        for line in tqdm(lines, nrows=80):
+        for idx, line in tqdm(enumerate(lines), nrows=80):
             if line != None:
                 S = line.split('\t')
                 R = S[1].replace('\n', '')
-                data = pd.Series({'REFCODE': R, 'SMILES': S[0]})
-                # smiles_dataframe = smiles_dataframe.append(data, ignore_index=True)
-                smiles_dataframe = pd.concat([smiles_dataframe, data], axis=0, ignore_index=True)
-            counter += 1
+                refcodes[idx] = R
+                smiles[idx] = S[0]
+        smiles_dataframe = pd.DataFrame({'REFCODE': refcodes, 'SMILES': smiles}).dropna(axis=0)
         unique_smiles_dataframe = smiles_dataframe.drop_duplicates(subset=['SMILES'],
                                                                    keep='last')
 
@@ -108,7 +106,8 @@ class PreprocessingCSD:
                     m_end = matches[i + 1].start()
                 refined_data = self.parse_data(data[m_start:m_end])
                 # info = info.append(refined_data, ignore_index=True)
-                info = pd.concat([info, refined_data], axis=0, ignore_index=True)
+                # info = pd.concat([info, refined_data], axis=0, ignore_index=True)
+                info.loc[i, :] = refined_data
 
             return info
 

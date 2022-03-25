@@ -18,8 +18,8 @@ class RepresentationGenerator:
         self.raw_df = df
         self.smiles = self.raw_df.SMILES
         self.id = self.raw_df.REFCODE
-        # self.smiles = self.raw_df.SMILES[0:10]
-        # self.id = self.raw_df.REFCODE[0:10]
+        # self.smiles = self.raw_df.SMILES[0:100]
+        # self.id = self.raw_df.REFCODE[0:100]
         self.ml_set = self.gen_ml_set()
 
 
@@ -27,7 +27,7 @@ class RepresentationGenerator:
         calc = Calculator(descriptors, ignore_3D=True)
         mols = [Chem.MolFromSmiles(p) for p in smile_list]
         mols_updated = [mol for mol in mols if isinstance(mol, Chem.Mol)]
-        refcodes = pd.Series([id[x] if isinstance(mols[x], Chem.Mol) else np.nan for x in range(len(mols))])
+        refcodes = pd.Series([id.iloc[x] if isinstance(mols[x], Chem.Mol) else np.nan for x in range(len(mols))])
         refcodes = refcodes.dropna()
         print(refcodes.shape)
         return pd.DataFrame(calc.pandas(mols_updated, nproc=os.cpu_count())), refcodes
@@ -120,5 +120,5 @@ class RepresentationGenerator:
         df = pd.merge(labels_df, clean_desc, left_on='REFCODE', right_index=True)
         df = df.drop('REFCODE', axis=1)
         df = df.rename(columns={'Habit' : 'label'})
-        if self.save_output: df.to_csv(f'{args.input}_dataset.csv')
+        if self.save_output: df.to_csv(f'./checkpoints/inputs/{args.input}_dataset.csv')
         return df
