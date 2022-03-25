@@ -52,7 +52,8 @@ class PreprocessingCSD:
                 S = line.split('\t')
                 R = S[1].replace('\n', '')
                 data = pd.Series({'REFCODE': R, 'SMILES': S[0]})
-                smiles_dataframe = smiles_dataframe.append(data, ignore_index=True)
+                # smiles_dataframe = smiles_dataframe.append(data, ignore_index=True)
+                smiles_dataframe = pd.concat([smiles_dataframe, data], axis=0, ignore_index=True)
             counter += 1
         unique_smiles_dataframe = smiles_dataframe.drop_duplicates(subset=['SMILES'],
                                                                    keep='last')
