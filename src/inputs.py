@@ -16,10 +16,10 @@ class RepresentationGenerator:
         print(f'GENERATING INPUT TYPE {args.input}')
         self.save_output = save_output
         self.raw_df = df
-        self.smiles = self.raw_df.SMILES
-        self.id = self.raw_df.REFCODE
-        # self.smiles = self.raw_df.SMILES[0:200]
-        # self.id = self.raw_df.REFCODE[0:200]
+        # self.smiles = self.raw_df.SMILES
+        # self.id = self.raw_df.REFCODE
+        self.smiles = self.raw_df.SMILES[0:1000]
+        self.id = self.raw_df.REFCODE[0:1000]
         self.ml_set = self.gen_ml_set()
 
 
@@ -28,7 +28,7 @@ class RepresentationGenerator:
         mols = [Chem.MolFromSmiles(p) for p in smile_list]
         mols_updated = [mol for mol in mols if isinstance(mol, Chem.Mol)]
         refcodes = pd.Series([id[x] if isinstance(mols[x], Chem.Mol) else np.nan for x in range(len(mols))])
-        refcodes = refcodes[refcodes != np.nan]
+        refcodes = refcodes.dropna()
         return pd.DataFrame(calc.pandas(mols_updated, nproc=os.cpu_count())), refcodes
 
     def rdkit_descriptors_from_smiles(self, smile_list):
