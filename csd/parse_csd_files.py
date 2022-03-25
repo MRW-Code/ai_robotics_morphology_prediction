@@ -107,7 +107,9 @@ class PreprocessingCSD:
                 if i < len(matches) - 1:
                     m_end = matches[i + 1].start()
                 refined_data = self.parse_data(data[m_start:m_end])
-                info = info.append(refined_data, ignore_index=True)
+                # info = info.append(refined_data, ignore_index=True)
+                info = pd.concat([info, refined_data], axis=0, ignore_index=True)
+
             return info
 
     def build_csd_output(self):
