@@ -16,10 +16,10 @@ class RepresentationGenerator:
         print(f'GENERATING INPUT TYPE {args.input}')
         self.save_output = save_output
         self.raw_df = df
-        self.smiles = self.raw_df.SMILES
-        self.id = self.raw_df.REFCODE
-        # self.smiles = self.raw_df.SMILES[0:100]
-        # self.id = self.raw_df.REFCODE[0:100]
+        # self.smiles = self.raw_df.SMILES
+        # self.id = self.raw_df.REFCODE
+        self.smiles = self.raw_df.SMILES[0:10]
+        self.id = self.raw_df.REFCODE[0:10]
         self.ml_set = self.gen_ml_set()
 
 
@@ -116,7 +116,7 @@ class RepresentationGenerator:
 
     def gen_ml_set(self):
         clean_desc = self.get_clean_descriptors(self.smiles, self.id)
-        labels_df = self.raw_df.loc[:, ['REFCODE', 'Habit']]
+        labels_df = self.raw_df.loc[:, ['REFCODE', 'Habit', 'Solvent']]
         df = pd.merge(labels_df, clean_desc, left_on='REFCODE', right_index=True)
         df = df.drop('REFCODE', axis=1)
         df = df.rename(columns={'Habit' : 'label'})
