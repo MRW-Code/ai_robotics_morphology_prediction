@@ -6,6 +6,10 @@ parser.add_argument('-i', '--input', action='store', dest='input',
                     default='mordred_descriptor', choices=['image', 'mordred_descriptor', 'rdkit_descriptor',
                                               'mol2vec', 'ecfp', 'pubchem_fp', 'maccs',
                                               'spectrophore', 'weave_graph'])
+parser.add_argument('-s', '--solvent', action='store', dest='solvent',
+                    default='all', choices=['all','ethanol', 'methanol', 'water'])
+parser.add_argument('-j', '--join_mode', action='store', dest='mode',
+                    default='concat', choices=['concat','one_hot', 'drop'])
 
 
 # parser.add_argument('-m', '--model', action='store', dest='model',

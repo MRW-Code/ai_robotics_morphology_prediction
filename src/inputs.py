@@ -115,6 +115,7 @@ class RepresentationGenerator:
         return clean_desc
 
     def gen_ml_set(self):
+        print(f'Generating {args.input} as inputs')
         clean_desc = self.get_clean_descriptors(self.smiles, self.id)
         labels_df = self.raw_df.loc[:, ['REFCODE', 'Habit', 'Solvent']]
         df = pd.merge(labels_df, clean_desc, left_on='REFCODE', right_index=True)
