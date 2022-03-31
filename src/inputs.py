@@ -16,10 +16,10 @@ class RepresentationGenerator:
         print(f'GENERATING INPUT TYPE {args.input}')
         self.save_output = save_output
         self.raw_df = df
-        # self.smiles = self.raw_df.SMILES
-        # self.id = self.raw_df.REFCODE
-        self.smiles = self.raw_df.SMILES[0:10]
-        self.id = self.raw_df.REFCODE[0:10]
+        self.smiles = self.raw_df.SMILES
+        self.id = self.raw_df.REFCODE
+        # self.smiles = self.raw_df.SMILES[0:10]
+        # self.id = self.raw_df.REFCODE[0:10]
         self.ml_set = self.gen_ml_set()
 
 
