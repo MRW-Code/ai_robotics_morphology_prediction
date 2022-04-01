@@ -10,7 +10,7 @@ parser.add_argument('-s', '--solvent', action='store', dest='solvent',
                     default='all', choices=['all','ethanol', 'methanol', 'water']) # Add as needed
 parser.add_argument('-j', '--join_mode', action='store', dest='mode',
                     default='concat', choices=['concat', 'one_hot', 'drop'])
-
+parser.add_argument('--no_augs', action='store_true', dest='no_augs', default=False)
 
 # parser.add_argument('-m', '--model', action='store', dest='model',
 #                     default='RF', choices=['RF', 'ResNet'])
