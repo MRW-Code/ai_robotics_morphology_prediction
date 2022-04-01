@@ -22,7 +22,7 @@ def train_fastai_model_classification(model_df, count):
                                    shuffle=True)
     metrics = [error_rate, accuracy]
     learn = cnn_learner(dls, resnet18, metrics=metrics)
-    learn.fine_tune(1, cbs=[SaveModelCallback(monitor='accuracy', fname=f'./{args.no_augs}_best_cbs.pth'),
+    learn.fine_tune(50, cbs=[SaveModelCallback(monitor='accuracy', fname=f'./{args.no_augs}_best_cbs.pth'),
                             ReduceLROnPlateau(monitor='valid_loss',
                                               min_delta=0.1,
                                               patience=2)])
