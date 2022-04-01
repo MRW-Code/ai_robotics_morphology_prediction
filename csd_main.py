@@ -30,6 +30,6 @@ if __name__ == '__main__':
 
     # Make sure all other no image inputs work
     ## add augs
-    ### add models
+    ### add no solvent option for images
     #### Single solvent added maybe add single habits?
 
