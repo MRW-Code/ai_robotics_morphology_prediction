@@ -1,5 +1,6 @@
 from src.utils import args
 import pandas as pd
+import numpy as np
 from csd.parse_csd_files import PreprocessingCSD
 from csd.cleaning import do_cleaning
 from src.inputs import RepresentationGenerator
@@ -44,3 +45,10 @@ def represent_solvents(inputs):
         features = inputs.drop(['label'], axis=1)   # Drop the labels
         features = pd.merge(sol_desc, features, left_on='index', right_on='Solvent').drop(['index', 'Solvent'], axis=1)
     return features
+
+def filter_image_solvents(fnames):
+    if args.solvent != 'all':
+        fnames = pd.Series(fnames)
+        fnames = np.array(fnames[fnames.str.contains(f'{args.solvent}')])
+    return fnames
+

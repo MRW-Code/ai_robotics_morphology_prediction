@@ -8,9 +8,9 @@ from tqdm import tqdm
 import re
 from fastai.vision.all import *
 from src.utils import args
+from src.factory import filter_image_solvents
 
 def train_fastai_model_classification(model_df, count):
-    # print(model_df.head(20), model_df.shape)
     dls = ImageDataLoaders.from_df(model_df,
                                    fn_col=0,
                                    label_col=1,
@@ -30,10 +30,11 @@ def train_fastai_model_classification(model_df, count):
     learn.export(f'./checkpoints/models/trained_model_{args.no_augs}_{count}.pkl')
 
 
-def train_kfold_fastai(n_splits):
-    print(f'Training FastAI model with no_augs = {args.no_augs}')
+def kfold_fastai(n_splits):
+    print(f'Training FastAI model with no_augs = {args.no_augs} and Solvent = {args.solvent}')
     os.makedirs('./checkpoints/models/', exist_ok=True)
     paths = np.array([f'./checkpoints/inputs/images/{file}' for file in os.listdir('./checkpoints/inputs/images/')])
+    paths = filter_image_solvents(paths)
     labels = np.array([re.findall(r'.*_(.*).png', label)[0] for label in paths])
     kfold = StratifiedKFold(n_splits=n_splits, shuffle=True)
     count = 0
@@ -57,8 +58,8 @@ def train_kfold_fastai(n_splits):
         best_metrics.append(model.final_record)
         count += 1
 
-        print(best_metrics)
-        print(f'mean acc = {np.mean([best_metrics[x][2] for x in range(n_splits)])}')
+    print(best_metrics)
+    print(f'mean acc = {np.mean([best_metrics[x][2] for x in range(n_splits)])}')
     return None
 
 def random_forest_classifier(features, labels, do_kfold=True):

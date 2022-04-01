@@ -1,7 +1,7 @@
 from src.utils import args
 from src.factory import represent_solvents, generate_csd_output, get_api_representations
 from src.image_generator import ImageGenerator
-from src.models import random_forest_classifier, train_kfold_fastai
+from src.models import random_forest_classifier, kfold_fastai
 import os
 import re
 import pandas as pd
@@ -17,7 +17,7 @@ if __name__ == '__main__':
             gen = ImageGenerator(csd_df)
         else:
             print('Using images loaded from files')
-        train_kfold_fastai(n_splits=10)
+        kfold_fastai(n_splits=10)
         print('done')
     else:
         api_features_df = get_api_representations(csd_df, save_outputs=True)
