@@ -9,6 +9,7 @@ import pandas as pd
 
 
 if __name__ == '__main__':
+    os.makedirs('./checkpoints/inputs/images', exist_ok=True)
     csd_df = generate_csd_output(min_sol_counts=100, min_habit_counts=1000, save_outputs=True)
 
     if args.input == 'image':

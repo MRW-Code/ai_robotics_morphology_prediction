@@ -38,7 +38,6 @@ class ImageGenerator():
         return None
 
     def gen_all_images(self):
-        os.makedirs('./checkpoints/inputs/images', exist_ok=True)
         Parallel(n_jobs=os.cpu_count())\
             (delayed(self.smile_to_image)(i, j, k, l, m) for i, j, k, l, m in tqdm.tqdm(zip(self.api_smiles,
                                                                           self.refcodes,
