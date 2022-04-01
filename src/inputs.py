@@ -12,15 +12,19 @@ from joblib import Parallel, delayed
 from src.utils import args
 
 class RepresentationGenerator:
-    def __init__(self, df, save_output):
-        print(f'GENERATING INPUT TYPE {args.input}')
+    def __init__(self, df, save_output, is_solvent):
         self.save_output = save_output
         self.raw_df = df
         self.smiles = self.raw_df.SMILES
-        self.id = self.raw_df.REFCODE
+
+        if not is_solvent: self.id = self.raw_df.REFCODE
+        else: self.id = self.raw_df.Solvent
+
         # self.smiles = self.raw_df.SMILES[0:10]
         # self.id = self.raw_df.REFCODE[0:10]
-        self.ml_set = self.gen_ml_set()
+
+        if not is_solvent: self.ml_set = self.gen_ml_set()
+        else: self.ml_set = self.get_solvent_descriptors()
 
 
     def mordred_descriptors_from_smiles(self, smile_list, id):
@@ -29,7 +33,6 @@ class RepresentationGenerator:
         mols_updated = [mol for mol in mols if isinstance(mol, Chem.Mol)]
         refcodes = pd.Series([id.iloc[x] if isinstance(mols[x], Chem.Mol) else np.nan for x in range(len(mols))])
         refcodes = refcodes.dropna()
-        print(refcodes.shape)
         return pd.DataFrame(calc.pandas(mols_updated, nproc=os.cpu_count())), refcodes
 
     def rdkit_descriptors_from_smiles(self, smile_list):
@@ -115,7 +118,7 @@ class RepresentationGenerator:
         return clean_desc
 
     def gen_ml_set(self):
-        print(f'Generating {args.input} as inputs')
+        print(f'Generating {args.input} for API molecules')
         clean_desc = self.get_clean_descriptors(self.smiles, self.id)
         labels_df = self.raw_df.loc[:, ['REFCODE', 'Habit', 'Solvent']]
         df = pd.merge(labels_df, clean_desc, left_on='REFCODE', right_index=True)
@@ -123,3 +126,8 @@ class RepresentationGenerator:
         df = df.rename(columns={'Habit' : 'label'})
         if self.save_output: df.to_csv(f'./checkpoints/inputs/{args.input}_dataset.csv')
         return df
+
+    def get_solvent_descriptors(self):
+        print(f'Generating {args.input} for Solvent molecules')
+        descriptors = self.get_clean_descriptors(self.smiles, self.id)
+        return descriptors.reset_index()

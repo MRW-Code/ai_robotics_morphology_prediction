@@ -1,0 +1,18 @@
+Solvent,SMILES
+ethanol,CCO
+methanol,CO
+ethyl acetate,O=C(OCC)C
+acetone,CC(C)=O
+hexane,CCCCCC
+diethyl ether,CCOCC
+acetonitrile,CC#N
+toluene,Cc1ccccc1
+benzene,c1ccccc1
+pentane,CCCCC
+water,O
+tetrahydrofuran,C1CCOC1
+dimethylformamide,CN(C)C=O
+isopropanol,CC(O)C
+cyclohexane,C1CCCCC1
+heptane,CCCCCCC
+dimethylsulfoxide,CS(=O)C
