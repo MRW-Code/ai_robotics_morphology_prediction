@@ -17,7 +17,6 @@ class PreprocessingCSD:
                 csd_smi_path = f'{self.raw_dir}/{file}'
         return csd_txt_path, csd_smi_path
 
-
     @staticmethod
     def remove_salts(file_path):
         """
@@ -34,7 +33,6 @@ class PreprocessingCSD:
             if "." not in line:
                 filtered_contents[i] = line
         return filtered_contents
-
 
     def smi_to_df(self):
         print('PARSING CSD .SMI FILE')
@@ -55,9 +53,7 @@ class PreprocessingCSD:
         smiles_dataframe = pd.DataFrame({'REFCODE': refcodes, 'SMILES': smiles}).dropna(axis=0)
         unique_smiles_dataframe = smiles_dataframe.drop_duplicates(subset=['SMILES'],
                                                                    keep='last')
-
         return unique_smiles_dataframe
-
 
     def extract_info(self, regex, data):
         """

@@ -4,15 +4,22 @@ from csd.parse_csd_files import PreprocessingCSD
 from csd.cleaning import do_cleaning
 from src.inputs import RepresentationGenerator
 
-
-
 def generate_csd_output(min_sol_counts, min_habit_counts, save_outputs):
     # Parse CSD output files
     if args.from_scratch:
-        parser = PreprocessingCSD(save_output=True)
+        parser = PreprocessingCSD(save_output=save_outputs)
         csd_df = parser.build_csd_output()
-        csd_df = do_cleaning(csd_df, min_sol_count=100, min_habit_count=1000, save_output=True)
-        input_gen = RepresentationGenerator(csd_df, save_output=True, is_solvent=False)
+        csd_df = do_cleaning(csd_df, min_sol_count=min_sol_counts,
+                             min_habit_count=min_habit_counts,
+                             save_output=save_outputs)
+    else:
+        print('Loading CSD df from csv')
+        csd_df = pd.read_csv('./csd/processed/clean_csd_output.csv', index_col=0)
+    return csd_df
+
+def get_api_representations(csd_df, save_outputs):
+    if args.from_scratch:
+        input_gen = RepresentationGenerator(csd_df, save_output=save_outputs, is_solvent=False)
         inputs = input_gen.ml_set
     else:
         print(f'Loading {args.input} as API molecule representations')
