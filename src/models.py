@@ -58,8 +58,7 @@ def kfold_fastai(n_splits):
             augmentor.do_image_augmentations(raw_model_df)
             aug_model_df = get_aug_df()
             model_df = pd.concat([aug_model_df, val_df])
-            print(model_df.head())
-            exit()
+
         trainer = train_fastai_model_classification(model_df, count)
         model = load_learner(f'./checkpoints/models/trained_model_{args.no_augs}_{count}.pkl', cpu=False)
         best_metrics.append(model.final_record)
