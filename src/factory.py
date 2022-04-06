@@ -60,7 +60,7 @@ def get_aug_df():
     image_dir = f'./checkpoints/inputs/aug_images/{args.mode}_images/'
     paths = [f'{image_dir}/{x}' for x in tqdm(os.listdir(image_dir))]
     labels = [re.findall(r'.*_(.*).png', y)[0] for y in tqdm(paths)]
-    model_df = pd.DataFrame({'path': paths,
+    model_df = pd.DataFrame({'fname': paths,
                              'label': labels})
     model_df['is_valid'] = 0
     return model_df
