@@ -1,3 +1,4 @@
+from src.utils import args
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import Draw
@@ -32,7 +33,16 @@ class ImageGenerator():
             sol_mol = Chem.MolFromSmiles(sol_smile)
             sol_img = np.array(Draw.MolToImage(sol_mol, size=[250, 250]))
             stacked = PIL.Image.fromarray(np.vstack([api_img, sol_img]))
-            stacked.save(f'./checkpoints/inputs/images/{refcode}_{sol_name}_{label}.png')
+
+            if args.mode == 'concat':
+                stacked.save(f'./checkpoints/inputs/{args.mode}_images/{refcode}_{sol_name}_{label}.png')
+            else:
+                if args.mode == 'one-hot':
+                    print('Cant one-hot images - hence using drop')
+                api_img = PIL.Image.fromarray(api_img)
+                api_img.save(f'./checkpoints/inputs/{args.mode}_images/{refcode}_{sol_name}_{label}.png')
+
+
         except:
             print(f'{api_smile}, {refcode}, {sol_smile}, {sol_name}, {label}')
         return None

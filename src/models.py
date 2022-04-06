@@ -33,7 +33,7 @@ def train_fastai_model_classification(model_df, count):
 def kfold_fastai(n_splits):
     print(f'Training FastAI model with no_augs = {args.no_augs} and Solvent = {args.solvent}')
     os.makedirs('./checkpoints/models/', exist_ok=True)
-    paths = np.array([f'./checkpoints/inputs/images/{file}' for file in os.listdir('./checkpoints/inputs/images/')])
+    paths = np.array([f'./checkpoints/inputs/{args.mode}_images/{file}' for file in os.listdir(f'./checkpoints/inputs/{args.mode}_images/')])
     paths = filter_image_solvents(paths)
     labels = np.array([re.findall(r'.*_(.*).png', label)[0] for label in paths])
     kfold = StratifiedKFold(n_splits=n_splits, shuffle=True)

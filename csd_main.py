@@ -9,11 +9,11 @@ import pandas as pd
 
 
 if __name__ == '__main__':
-    os.makedirs('./checkpoints/inputs/images', exist_ok=True)
+    os.makedirs(f'./checkpoints/inputs/{args.mode}_images', exist_ok=True)
     csd_df = generate_csd_output(min_sol_counts=100, min_habit_counts=1000, save_outputs=True)
 
     if args.input == 'image':
-        if args.from_scratch or len(os.listdir('./checkpoints/inputs/images')) == 0:
+        if args.from_scratch or len(os.listdir(f'./checkpoints/inputs/{args.mode}_images')) == 0:
             gen = ImageGenerator(csd_df)
         else:
             print('Using images loaded from files')
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     print('done')
 
 
-    # Make sure all other no image inputs work
+    # Make sure all other no image inputs work - currently they dont
     ## add augs
     ### add no solvent option for images
     #### Single solvent added maybe add single habits?
