@@ -4,6 +4,9 @@ import numpy as np
 from csd.parse_csd_files import PreprocessingCSD
 from csd.cleaning import do_cleaning
 from src.inputs import RepresentationGenerator
+from tqdm import tqdm
+import os
+import re
 
 def generate_csd_output(min_sol_counts, min_habit_counts, save_outputs):
     # Parse CSD output files
@@ -52,3 +55,12 @@ def filter_image_solvents(fnames):
         fnames = np.array(fnames[fnames.str.contains(f'{args.solvent}')])
     return fnames
 
+def get_aug_df():
+    print('GETTING AUG DF')
+    image_dir = f'./checkpoints/inputs/aug_images/{args.mode}_images/'
+    paths = [f'{image_dir}/{x}' for x in tqdm(os.listdir(image_dir))]
+    labels = [re.findall(r'.*_(.*).png', y)[0] for y in tqdm(paths)]
+    model_df = pd.DataFrame({'path': paths,
+                             'label': labels})
+    model_df['is_valid'] = 0
+    return model_df

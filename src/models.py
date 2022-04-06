@@ -8,7 +8,9 @@ from tqdm import tqdm
 import re
 from fastai.vision.all import *
 from src.utils import args
-from src.factory import filter_image_solvents
+from src.factory import filter_image_solvents, get_aug_df
+from src.image_augmentor import ImageAugmentations
+
 
 def train_fastai_model_classification(model_df, count):
     dls = ImageDataLoaders.from_df(model_df,
@@ -51,7 +53,11 @@ def kfold_fastai(n_splits):
         if args.no_augs:
             model_df = pd.concat([train_df, val_df])
         else:
-            raise NotImplementedError()
+            raw_model_df = pd.concat([train_df, val_df])
+            augmentor = ImageAugmentations()
+            augmentor.do_image_augmentations(raw_model_df)
+            aug_model_df = get_aug_df()
+            model_df = pd.concat([aug_model_df, val_df])
 
         trainer = train_fastai_model_classification(model_df, count)
         model = load_learner(f'./checkpoints/models/trained_model_{args.no_augs}_{count}.pkl', cpu=False)
