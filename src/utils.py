@@ -8,7 +8,14 @@ parser.add_argument('-i', '--input', action='store', dest='input',
                                               'mol2vec', 'ecfp', 'pubchem_fp', 'maccs',
                                               'spectrophore', 'weave_graph'])
 parser.add_argument('-s', '--solvent', action='store', dest='solvent',
-                    default='all', choices=['all','ethanol', 'methanol', 'water']) # Add as needed
+                    default='all', choices=['all', 'ethanol', 'methanol', 'water',
+                                            'ethyl acetate', 'acetone',
+                                            'hexane', 'acetonitrile',
+                                            'diethyl ether', 'toluene',
+                                            'benzene', 'pentane',
+                                            'tetrahydrofuran', 'dimethylsulfoxide',
+                                            'isopropanol', 'dimethylformamide',
+                                            'cyclohexane', 'heptane']) # Add as needed
 parser.add_argument('-j', '--join_mode', action='store', dest='mode',
                     default='concat', choices=['concat', 'one_hot', 'drop'])
 parser.add_argument('--no_augs', action='store_true', dest='no_augs', default=False)

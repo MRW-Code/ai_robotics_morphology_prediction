@@ -37,17 +37,20 @@ def represent_solvents(inputs):
 
     # Choose solvents as descriptors, one hot or drop them altogether
     if args.mode == 'one_hot':
+        labels = inputs['label']
         features = inputs.drop(['label', 'Solvent'], axis=1)
         enc = pd.get_dummies(inputs['Solvent'])
         features = features.join(enc).reset_index(drop=True)
     elif args.mode == 'drop':
+        labels = inputs['label']
         features = inputs.drop(['label', 'Solvent'], axis=1)
     else:
         sol_df = pd.read_csv('./csd/raw_data/solvent_smiles.csv')
         sol_desc = RepresentationGenerator(sol_df, save_output=False, is_solvent=True).ml_set # Add solvent descriptors
-        features = inputs.drop(['label'], axis=1)   # Drop the labels
+        labels = inputs['label']
+        features = inputs.drop(['label'], axis=1) # Drop the labels
         features = pd.merge(sol_desc, features, left_on='index', right_on='Solvent').drop(['index', 'Solvent'], axis=1)
-    return features
+    return features, labels
 
 def filter_image_solvents(fnames):
     if args.solvent != 'all':

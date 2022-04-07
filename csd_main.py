@@ -21,15 +21,14 @@ if __name__ == '__main__':
         print('done')
     else:
         api_features_df = get_api_representations(csd_df, save_outputs=True)
-        labels = api_features_df['label']
-        features = represent_solvents(api_features_df)
+        # labels = api_features_df['label']
+        features, labels = represent_solvents(api_features_df)
         model = random_forest_classifier(features, labels)
 
     print('done')
 
 
     # Make sure all other no image inputs work - currently they dont
-    ## add augs
-    ### add no solvent option for images
-    #### Single solvent added maybe add single habits?
+    ## Single solvent added test for images - desc works
+    ### built the robot code into the project
 
