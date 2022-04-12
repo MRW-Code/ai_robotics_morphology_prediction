@@ -8,7 +8,7 @@ parser.add_argument('-i', '--input', action='store', dest='input',
                                               'mol2vec', 'ecfp', 'pubchem_fp', 'maccs',
                                               'spectrophore', 'weave_graph'])
 parser.add_argument('-s', '--solvent', action='store', dest='solvent',
-                    default='all', choices=['all', 'ethanol', 'methanol', 'water',
+                    default='all', choices=['all', 'ethanol', 'methanol', 'raw_images',
                                             'ethyl acetate', 'acetone',
                                             'hexane', 'acetonitrile',
                                             'diethyl ether', 'toluene',
