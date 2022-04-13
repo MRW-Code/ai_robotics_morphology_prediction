@@ -28,14 +28,23 @@ def robot_train_fastai_model_classification(model_df, count):
                                    item_tfms=None,
                                    batch_tfms=None,
                                    y_block=CategoryBlock(),
-                                   bs=256,
+                                   bs=8,
                                    shuffle=True)
     metrics = [error_rate, accuracy]
     learn = cnn_learner(dls, resnet18, metrics=metrics)
-    learn.fine_tune(50, cbs=[SaveModelCallback(monitor='accuracy', fname=f'./{args.no_augs}_best_cbs.pth'),
+    learn.fine_tune(10, cbs=[SaveModelCallback(monitor='accuracy', fname=f'./{args.no_augs}_best_cbs.pth'),
                             ReduceLROnPlateau(monitor='valid_loss',
                                               min_delta=0.1,
-                                              patience=2)])
+                                              patience=3),
+                             EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=5)])
+
+    os.makedirs('dl_morph_labelling/checkpoints/figures', exist_ok=True)
+    interp = ClassificationInterpretation.from_learner(learn)
+    interp.plot_confusion_matrix()
+    plt.savefig(f'./dl_morph_labelling/checkpoints/figures/conf_mtrx_val_test_{count}')
+
+    exit()
+
     print(learn.validate())
     learn.export(f'./dl_morph_labelling/checkpoints/models/trained_model_{args.no_augs}_{count}.pkl')
 
