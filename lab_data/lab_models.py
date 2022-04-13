@@ -23,10 +23,12 @@ def train_fastai_model_classification(model_df, count):
                                    shuffle=True)
     metrics = [error_rate, accuracy]
     learn = cnn_learner(dls, resnet18, metrics=metrics)
-    learn.fine_tune(50, cbs=[SaveModelCallback(monitor='accuracy', fname=f'./lab_{args.no_augs}_best_cbs.pth'),
+    learn.fine_tune(50, cbs=[SaveModelCallback(monitor='valid_loss', fname=f'./lab_{args.no_augs}_best_cbs.pth'),
                             ReduceLROnPlateau(monitor='valid_loss',
                                               min_delta=0.1,
-                                              patience=2)])
+                                              patience=2),
+                             EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=5)])
+
     print(learn.validate())
     learn.export(f'./lab_data/checkpoints/models/lab_trained_model_{args.no_augs}_{count}.pkl')
 
@@ -64,4 +66,30 @@ def lab_kfold_fastai(n_splits):
 
     print(best_metrics)
     print(f'mean acc = {np.mean([best_metrics[x][2] for x in range(n_splits)])}')
+    return None
+
+def lab_random_forest_classifier(features, labels, splits):
+    print(f'RUNNING RF CLASSIFIER WITH KFOLD')
+    splits = 10
+    count = 0
+    kfold = StratifiedKFold(n_splits=splits, shuffle=True)
+
+    # Placeholders for metrics
+    acc = np.empty(splits)
+
+    # stratified kfold training
+    for train_index, val_index in tqdm(kfold.split(features, labels), nrows=80):
+        X_train, X_test = np.array(features.iloc[train_index, :]), np.array(features.iloc[val_index, :])
+        y_train, y_test = np.array(labels)[train_index], np.array(labels)[val_index]
+        model = RandomForestClassifier(n_estimators=100,
+                                       n_jobs=-1,
+                                       verbose=0)
+        model.fit(X_train, y_train)
+        preds = model.predict(X_test)
+
+        # generate metrics
+        acc[count] = accuracy_score(y_test, preds)
+        count += 1
+    print(f'Model has {len(labels.value_counts())} classes')
+    print(f'Mean Accuracy = {np.mean(acc)}')
     return None

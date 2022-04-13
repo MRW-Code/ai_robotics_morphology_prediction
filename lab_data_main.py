@@ -1,6 +1,7 @@
 from src.utils import args
 from lab_data.lab_image_generator import LabImageGenerator
-from lab_data.lab_models import lab_kfold_fastai
+from lab_data.lab_models import lab_kfold_fastai, lab_random_forest_classifier
+from lab_data.lab_descriptors import LabRepresentationGenerator
 import os
 import re
 import pandas as pd
@@ -19,15 +20,10 @@ if __name__ == '__main__':
         lab_kfold_fastai(n_splits=5)
         print('done')
     else:
-        raise NotImplementedError()
-
-    # else:
-    #     api_features_df = get_api_representations(csd_df, save_outputs=True)
-    #     # labels = api_features_df['label']
-    #     features, labels = represent_solvents(api_features_df)
-    #     model = random_forest_classifier(features, labels)
-    #
-    # print('done')
+        ml_df = LabRepresentationGenerator(raw_df, save_output=True).ml_set
+        labels = ml_df['label']
+        features = ml_df.drop('label', axis=1)
+        model = lab_random_forest_classifier(features, labels, splits=5)
 
     print('done')
 
