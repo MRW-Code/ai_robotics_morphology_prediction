@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from csd.parse_csd_files import PreprocessingCSD
 from csd.cleaning import do_cleaning
-from src.inputs import RepresentationGenerator
+from csd.inputs import RepresentationGenerator
 from tqdm import tqdm
 import os
 import re
@@ -27,7 +27,7 @@ def get_api_representations(csd_df, save_outputs):
         inputs = input_gen.ml_set
     else:
         print(f'Loading {args.input} as API molecule representations')
-        inputs = pd.read_csv(f'./checkpoints/inputs/{args.input}_dataset.csv', index_col=0)
+        inputs = pd.read_csv(f'./csd/checkpoints/inputs/{args.input}_dataset.csv', index_col=0)
     return inputs
 
 def represent_solvents(inputs):
@@ -60,7 +60,7 @@ def filter_image_solvents(fnames):
 
 def get_aug_df():
     print('GETTING AUG DF')
-    image_dir = f'./checkpoints/inputs/aug_images/{args.mode}_images'
+    image_dir = f'./csd/checkpoints/inputs/aug_images/{args.mode}_images'
     paths = [f'{image_dir}/{x}' for x in tqdm(os.listdir(image_dir))]
     labels = [re.findall(r'.*_(.*).png', y)[0] for y in tqdm(paths)]
     model_df = pd.DataFrame({'fname': paths,

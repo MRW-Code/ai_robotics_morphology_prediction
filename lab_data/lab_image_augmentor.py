@@ -9,7 +9,7 @@ import tqdm
 import re
 from src.utils import args
 
-class ImageAugmentations:
+class LabImageAugmentations:
 
     def __init__(self):
         self.img = None
@@ -46,7 +46,7 @@ class ImageAugmentations:
 
     def do_image_augmentations(self, model_df):
         print('AUGMENTING IMAGES')
-        save_path = f'./checkpoints/inputs/aug_images/{args.mode}_images/'
+        save_path = f'./lab_data/checkpoints/inputs/aug_images/'
         os.makedirs(save_path, exist_ok=True)
         model_df = model_df[model_df['is_valid'] == 0]
         input = [(x, y) for x, y in zip(model_df['fname'], model_df['label'])]

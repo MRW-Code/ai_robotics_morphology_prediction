@@ -124,7 +124,7 @@ class RepresentationGenerator:
         df = pd.merge(labels_df, clean_desc, left_on='REFCODE', right_index=True)
         df = df.drop('REFCODE', axis=1)
         df = df.rename(columns={'Habit' : 'label'})
-        if self.save_output: df.to_csv(f'./checkpoints/inputs/{args.input}_dataset.csv')
+        if self.save_output: df.to_csv(f'./csd/checkpoints/inputs/{args.input}_dataset.csv')
         return df
 
     def get_solvent_descriptors(self):

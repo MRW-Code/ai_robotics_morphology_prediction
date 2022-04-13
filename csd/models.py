@@ -8,8 +8,8 @@ from tqdm import tqdm
 import re
 from fastai.vision.all import *
 from src.utils import args
-from src.factory import filter_image_solvents, get_aug_df
-from src.image_augmentor import ImageAugmentations
+from csd.factory import filter_image_solvents, get_aug_df
+from csd.image_augmentor import ImageAugmentations
 
 
 def train_fastai_model_classification(model_df, count):
@@ -24,18 +24,18 @@ def train_fastai_model_classification(model_df, count):
                                    shuffle=True)
     metrics = [error_rate, accuracy]
     learn = cnn_learner(dls, resnet18, metrics=metrics)
-    learn.fine_tune(50, cbs=[SaveModelCallback(monitor='accuracy', fname=f'./{args.no_augs}_best_cbs.pth'),
+    learn.fine_tune(50, cbs=[SaveModelCallback(monitor='accuracy', fname=f'./csd_{args.no_augs}_best_cbs.pth'),
                             ReduceLROnPlateau(monitor='valid_loss',
                                               min_delta=0.1,
                                               patience=2)])
     print(learn.validate())
-    learn.export(f'./checkpoints/models/trained_model_{args.no_augs}_{count}.pkl')
+    learn.export(f'./csd/checkpoints/models/csd_trained_model_{args.no_augs}_{count}.pkl')
 
 
 def kfold_fastai(n_splits):
     print(f'Training FastAI model with no_augs = {args.no_augs} and Solvent = {args.solvent}')
-    os.makedirs('./checkpoints/models/', exist_ok=True)
-    paths = np.array([f'./checkpoints/inputs/{args.mode}_images/{file}' for file in os.listdir(f'./checkpoints/inputs/{args.mode}_images/')])
+    os.makedirs('./csd/checkpoints/models/', exist_ok=True)
+    paths = np.array([f'./csd/checkpoints/inputs/{args.mode}_images/{file}' for file in os.listdir(f'./csd/checkpoints/inputs/{args.mode}_images/')])
     paths = filter_image_solvents(paths)
     labels = np.array([re.findall(r'.*_(.*).png', label)[0] for label in paths])
     kfold = StratifiedKFold(n_splits=n_splits, shuffle=True)
@@ -60,7 +60,7 @@ def kfold_fastai(n_splits):
             model_df = pd.concat([aug_model_df, val_df])
 
         trainer = train_fastai_model_classification(model_df, count)
-        model = load_learner(f'./checkpoints/models/trained_model_{args.no_augs}_{count}.pkl', cpu=False)
+        model = load_learner(f'./csd/checkpoints/models/csd_trained_model_{args.no_augs}_{count}.pkl', cpu=False)
         best_metrics.append(model.final_record)
         count += 1
 

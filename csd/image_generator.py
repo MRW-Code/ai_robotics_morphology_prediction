@@ -35,12 +35,12 @@ class ImageGenerator():
             stacked = PIL.Image.fromarray(np.vstack([api_img, sol_img]))
 
             if args.mode == 'concat':
-                stacked.save(f'./checkpoints/inputs/{args.mode}_images/{refcode}_{sol_name}_{label}.png')
+                stacked.save(f'./csd/checkpoints/inputs/{args.mode}_images/{refcode}_{sol_name}_{label}.png')
             else:
                 if args.mode == 'one-hot':
                     print('Cant one-hot images - hence using drop')
                 api_img = PIL.Image.fromarray(api_img)
-                api_img.save(f'./checkpoints/inputs/{args.mode}_images/{refcode}_{sol_name}_{label}.png')
+                api_img.save(f'./csd/checkpoints/inputs/{args.mode}_images/{refcode}_{sol_name}_{label}.png')
 
 
         except:
