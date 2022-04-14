@@ -17,7 +17,7 @@ if __name__ == '__main__':
             gen = LabImageGenerator(raw_df)
         else:
             print('Loading Lab Images From Files')
-        lab_kfold_fastai(n_splits=5)
+        lab_kfold_fastai(n_splits=10)
         print('done')
     else:
         ml_df = LabRepresentationGenerator(raw_df, save_output=True).ml_set

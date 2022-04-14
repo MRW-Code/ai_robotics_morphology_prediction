@@ -29,6 +29,11 @@ def train_fastai_model_classification(model_df, count):
                                               patience=2),
                              EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=5)])
 
+    os.makedirs('./lab_data/checkpoints/figures', exist_ok=True)
+    interp = ClassificationInterpretation.from_learner(learn)
+    interp.plot_confusion_matrix()
+    plt.savefig(f'./lab_data/checkpoints/figures/conf_mtrx_val_test_{count}')
+
     print(learn.validate())
     learn.export(f'./lab_data/checkpoints/models/lab_trained_model_{args.no_augs}_{count}.pkl')
 

@@ -38,12 +38,10 @@ def robot_train_fastai_model_classification(model_df, count):
                                               patience=3),
                              EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=5)])
 
-    os.makedirs('dl_morph_labelling/checkpoints/figures', exist_ok=True)
+    os.makedirs('./dl_morph_labelling/checkpoints/figures', exist_ok=True)
     interp = ClassificationInterpretation.from_learner(learn)
     interp.plot_confusion_matrix()
     plt.savefig(f'./dl_morph_labelling/checkpoints/figures/conf_mtrx_val_test_{count}')
-
-    exit()
 
     print(learn.validate())
     learn.export(f'./dl_morph_labelling/checkpoints/models/trained_model_{args.no_augs}_{count}.pkl')
