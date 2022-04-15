@@ -75,7 +75,6 @@ def lab_kfold_fastai(n_splits):
 
 def lab_random_forest_classifier(features, labels, splits):
     print(f'RUNNING RF CLASSIFIER WITH KFOLD')
-    splits = 10
     count = 0
     kfold = StratifiedKFold(n_splits=splits, shuffle=True)
 
