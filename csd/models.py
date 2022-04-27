@@ -27,7 +27,8 @@ def train_fastai_model_classification(model_df, count):
     learn.fine_tune(50, cbs=[SaveModelCallback(monitor='accuracy', fname=f'./csd_{args.no_augs}_best_cbs.pth'),
                             ReduceLROnPlateau(monitor='valid_loss',
                                               min_delta=0.1,
-                                              patience=2)])
+                                              patience=2),
+                             EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=10)])
     print(learn.validate())
     learn.export(f'./csd/checkpoints/models/csd_trained_model_{args.no_augs}_{count}.pkl')
 
