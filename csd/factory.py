@@ -62,6 +62,7 @@ def get_aug_df():
     print('GETTING AUG DF')
     image_dir = f'./csd/checkpoints/inputs/aug_images/{args.mode}_images'
     paths = [f'{image_dir}/{x}' for x in tqdm(os.listdir(image_dir))]
+    paths = filter_image_solvents(paths)
     labels = [re.findall(r'.*_(.*).png', y)[0] for y in tqdm(paths)]
     model_df = pd.DataFrame({'fname': paths,
                              'label': labels})

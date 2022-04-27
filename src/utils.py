@@ -4,7 +4,7 @@ import os
 parser = argparse.ArgumentParser(usage='python main.py')
 parser.add_argument('--from_scratch', action='store_true', dest='from_scratch')
 parser.add_argument('-i', '--input', action='store', dest='input',
-                    default='mordred_descriptor', choices=['image', 'mordred_descriptor', 'rdkit_descriptor',
+                    default='image', choices=['image', 'mordred_descriptor', 'rdkit_descriptor',
                                               'mol2vec', 'ecfp', 'pubchem_fp', 'maccs',
                                               'spectrophore', 'weave_graph'])
 parser.add_argument('-s', '--solvent', action='store', dest='solvent',
