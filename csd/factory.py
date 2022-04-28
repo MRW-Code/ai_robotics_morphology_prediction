@@ -54,8 +54,15 @@ def represent_solvents(inputs):
 
 def filter_image_solvents(fnames):
     if args.solvent != 'all':
-        fnames = pd.Series(fnames)
-        fnames = np.array(fnames[fnames.str.contains(f'{args.solvent}')])
+        if args.solvent == 'best_single':
+            fnames = pd.Series(fnames)
+            sols = ['benzene', 'pentane', 'tetrahydrofuran', 'dimethylsulfoxide',
+                    'isopropanol', 'dimethylformamide', 'cyclohexane', 'heptane']
+            best_sols = [fnames[fnames.str.contains(sol)] for sol in sols]
+            fnames = np.array([item for sublist in best_sols for item in sublist])
+        else:
+            fnames = pd.Series(fnames)
+            fnames = np.array(fnames[fnames.str.contains(f'{args.solvent}')])
     return fnames
 
 def get_aug_df():

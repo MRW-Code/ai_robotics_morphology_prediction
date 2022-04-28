@@ -4,9 +4,7 @@ import os
 parser = argparse.ArgumentParser(usage='python main.py')
 parser.add_argument('--from_scratch', action='store_true', dest='from_scratch')
 parser.add_argument('-i', '--input', action='store', dest='input',
-                    default='image', choices=['image', 'mordred_descriptor', 'rdkit_descriptor',
-                                              'mol2vec', 'ecfp', 'pubchem_fp', 'maccs',
-                                              'spectrophore', 'weave_graph'])
+                    default='image', choices=['image', 'mordred_descriptor'])
 parser.add_argument('-s', '--solvent', action='store', dest='solvent',
                     default='all', choices=['all', 'ethanol', 'methanol', 'water',
                                             'ethyl acetate', 'acetone',
@@ -15,7 +13,7 @@ parser.add_argument('-s', '--solvent', action='store', dest='solvent',
                                             'benzene', 'pentane',
                                             'tetrahydrofuran', 'dimethylsulfoxide',
                                             'isopropanol', 'dimethylformamide',
-                                            'cyclohexane', 'heptane']) # Add as needed
+                                            'cyclohexane', 'heptane', 'best_single']) # Add as needed
 parser.add_argument('-j', '--join_mode', action='store', dest='mode',
                     default='concat', choices=['concat', 'one_hot', 'drop'])
 parser.add_argument('--no_augs', action='store_true', dest='no_augs', default=False)
