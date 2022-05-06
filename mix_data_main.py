@@ -28,7 +28,7 @@ if __name__ == '__main__':
         gen = LabImageGenerator(raw_df)
 
 
-    mix_fastai(set_for_val='lab')
+    mix_fastai(set_for_val='csd')
 
 
 
