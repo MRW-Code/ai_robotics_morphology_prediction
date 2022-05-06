@@ -78,7 +78,7 @@ def mix_fastai(set_for_val):
         augmentor.do_image_augmentations(raw_model_df)
         aug_model_df = get_lab_aug_df()
         model_df = pd.concat([aug_model_df, val_df])
-
+    print(model_df.shape)
     trainer = train_fastai_model_classification(model_df, count)
     model = load_learner(f'./mix_data/checkpoints/models/lab_trained_model_{args.no_augs}_{count}.pkl', cpu=False)
     best_metrics.append(model.final_record)
