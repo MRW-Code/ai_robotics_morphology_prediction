@@ -85,5 +85,5 @@ def mix_fastai(set_for_val):
     count += 1
 
     print(best_metrics)
-    print(f'mean acc = {np.mean([best_metrics[x][2] for x in range(n_splits)])}')
+    print(f'mean acc = {best_metrics[0][2]}')
     return None
