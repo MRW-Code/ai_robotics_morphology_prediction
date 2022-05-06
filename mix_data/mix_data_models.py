@@ -28,7 +28,7 @@ def train_fastai_model_classification(model_df, count):
                             ReduceLROnPlateau(monitor='valid_loss',
                                               min_delta=0.1,
                                               patience=2),
-                             EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=5)])
+                             EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=10)])
 
     os.makedirs('./mix_data/checkpoints/figures', exist_ok=True)
     interp = ClassificationInterpretation.from_learner(learn)
