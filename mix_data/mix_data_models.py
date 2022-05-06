@@ -49,6 +49,7 @@ def mix_fastai(set_for_val):
     paths_csd = np.array([f'./csd/checkpoints/inputs/{args.mode}_images/{file}' for file in
                       os.listdir(f'./csd/checkpoints/inputs/{args.mode}_images/')])
     paths_csd = filter_image_solvents(paths_csd)
+    paths_csd = [x for x in paths_csd if "prism" not in x]
     labels_csd = np.array([re.findall(r'.*_(.*).png', label)[0] for label in paths_csd])
 
     best_metrics = []
