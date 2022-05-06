@@ -55,7 +55,7 @@ def mix_fastai(set_for_val):
     best_metrics = []
     count = 0
 
-    if set_for_val == 'lab':
+    if set_for_val == 'csd':
         X_train, X_val = paths_csd, paths_lab
         y_train, y_val = labels_csd, labels_lab
 
