@@ -14,25 +14,29 @@ from lab_data.lab_descriptors import LabRepresentationGenerator
 import os
 import re
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 if __name__ == '__main__':
-    # #### FOR CSD DATA
-    # csd_df = pd.read_csv('./checkpoints/inputs/mordred_descriptor_dataset.csv')
-    # api_features_df = get_api_representations(csd_df, save_outputs=False)
-    # X, labels = represent_solvents(api_features_df)
+    #### FOR CSD DATA
+    csd_df = pd.read_csv('./checkpoints/inputs/mordred_descriptor_dataset.csv')
+    api_features_df = get_api_representations(csd_df, save_outputs=False)
+    X, labels = represent_solvents(api_features_df)
 
-    #### FOR LAB DATA
-    raw_df = pd.read_csv('./lab_data/raw_data/summer_hts_data_matt.csv')
-    ml_df = LabRepresentationGenerator(raw_df, save_output=True).ml_set
-    labels = ml_df['label']
-    X = ml_df.drop('label', axis=1)
+    # #### FOR LAB DATA
+    # raw_df = pd.read_csv('./lab_data/raw_data/summer_hts_data_matt.csv')
+    # ml_df = LabRepresentationGenerator(raw_df, save_output=True).ml_set
+    # labels = ml_df['label']
+    # X = ml_df.drop('label', axis=1)
 
 
     enc_labels = pd.get_dummies(labels)
     X = np.concatenate([X, pd.get_dummies(labels)], axis=1)
 
+    scl = MinMaxScaler()
+    X = scl.fit_transform(X)
+
     distortions = []
-    for i in range(2, 11):
+    for i in range(1, 11):
         km = KMeans(
             n_clusters=i, init='random',
             n_init=10, max_iter=300,
@@ -42,7 +46,7 @@ if __name__ == '__main__':
         distortions.append(km.inertia_)
 
     # plot
-    plt.plot(range(2, 11), distortions, marker='o')
+    plt.plot(range(1, 11), distortions, marker='o')
     plt.xlabel('Number of clusters')
     plt.ylabel('Distortion')
     plt.show()
@@ -64,4 +68,3 @@ for j in range(1,10):
     plt.show()
 
 
-    print('done')
