@@ -53,13 +53,13 @@ def robot_train_fastai_model_classification(model_df, count):
                                               patience=3),
                              EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=5)])
 
-    os.makedirs('./dl_morph_labelling/checkpoints/figures', exist_ok=True)
+    os.makedirs(f'./dl_morph_labelling/checkpoints/figures/{args.model}', exist_ok=True)
     interp = ClassificationInterpretation.from_learner(learn)
     interp.plot_confusion_matrix()
-    plt.savefig(f'./dl_morph_labelling/checkpoints/figures/conf_mtrx_val_test_{count}')
+    plt.savefig(f'./dl_morph_labelling/checkpoints/figures/{args.model}/conf_mtrx_val_test_{count}')
 
     print(learn.validate())
-    learn.export(f'./dl_morph_labelling/checkpoints/models/trained_model_{args.no_augs}_{count}.pkl')
+    learn.export(f'./dl_morph_labelling/checkpoints/models/{args.model}/trained_model_{args.no_augs}_{count}.pkl')
 
 def robot_external_test_model(model_df):
     dls = ImageDataLoaders.from_df(model_df,
@@ -87,7 +87,7 @@ def robot_external_test_model(model_df):
 
 def robot_kfold_fastai(robot_df, n_splits):
     print(f'Training Robot FastAI model with no_augs = {args.no_augs}')
-    os.makedirs('./dl_morph_labelling/checkpoints/models/', exist_ok=True)
+    os.makedirs(f'./dl_morph_labelling/checkpoints/models/{args.model}/', exist_ok=True)
     paths = robot_df.fname
     labels = robot_df.label
     kfold = StratifiedKFold(n_splits=n_splits, shuffle=True)
@@ -112,7 +112,7 @@ def robot_kfold_fastai(robot_df, n_splits):
             model_df = pd.concat([aug_model_df, val_df])
 
         trainer = robot_train_fastai_model_classification(model_df, count)
-        model = load_learner(f'./dl_morph_labelling/checkpoints/models/trained_model_{args.no_augs}_{count}.pkl', cpu=False)
+        model = load_learner(f'./dl_morph_labelling/checkpoints/models/{args.model}/trained_model_{args.no_augs}_{count}.pkl', cpu=False)
         best_metrics.append(model.final_record)
         count += 1
 
