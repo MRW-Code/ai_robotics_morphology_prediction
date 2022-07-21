@@ -20,6 +20,21 @@ def get_robot_aug_df():
     model_df['is_valid'] = 0
     return model_df
 
+def get_robot_external_set():
+    print('LOADING EXTERNAL TEST SET')
+    image_dir = './dl_morph_labelling/external_test_robot'
+    img_list = []
+    label_list = []
+    for label in os.listdir(image_dir):
+        for img in os.listdir(f'{image_dir}/{label}'):
+            path = f'{image_dir}/{label}/{img}'
+            img_list.append(path)
+            label_list.append(label)
+    external_df = pd.DataFrame({'fname': img_list,
+                                'label': label_list})
+
+    return external_df[external_df.label != 'misc']
+
 def robot_train_fastai_model_classification(model_df, count):
     dls = ImageDataLoaders.from_df(model_df,
                                    fn_col=0,
@@ -45,6 +60,30 @@ def robot_train_fastai_model_classification(model_df, count):
 
     print(learn.validate())
     learn.export(f'./dl_morph_labelling/checkpoints/models/trained_model_{args.no_augs}_{count}.pkl')
+
+def robot_external_test_model(model_df):
+    dls = ImageDataLoaders.from_df(model_df,
+                                   fn_col=0,
+                                   label_col=1,
+                                   valid_col=2,
+                                   item_tfms=None,
+                                   batch_tfms=None,
+                                   y_block=CategoryBlock(),
+                                   bs=8,
+                                   shuffle=True)
+    metrics = [error_rate, accuracy]
+    learn = cnn_learner(dls, resnet18, metrics=metrics)
+    learn.fine_tune(5)
+
+    os.makedirs('./dl_morph_labelling/checkpoints/test/figures', exist_ok=True)
+    interp = ClassificationInterpretation.from_learner(learn)
+    interp.plot_confusion_matrix()
+    plt.savefig(f'./dl_morph_labelling/checkpoints/test/figures/conf_mtrx_external_test')
+
+    print(learn.validate())
+    # learn.export(f'./dl_morph_labelling/checkpoints/models/trained_model_{args.no_augs}_{count}.pkl')
+
+
 
 def robot_kfold_fastai(robot_df, n_splits):
     print(f'Training Robot FastAI model with no_augs = {args.no_augs}')
@@ -80,3 +119,24 @@ def robot_kfold_fastai(robot_df, n_splits):
     print(best_metrics)
     print(f'mean acc = {np.mean([best_metrics[x][2] for x in range(n_splits)])}')
     return None
+
+def robot_external_test(robot_df):
+    print(f'Training Robot for External Testing')
+    paths = robot_df.fname
+    labels = robot_df.label
+    train_df = pd.DataFrame({'fname': paths, 'label': labels})
+    train_df.loc[:, 'is_valid'] = 0
+    test_df = get_robot_external_set()
+    test_df.loc[:, 'is_valid'] = 1
+
+    if args.no_augs:
+        model_df = pd.concat([train_df, test_df])
+    else:
+        raw_model_df = pd.concat([train_df, test_df])
+        augmentor = RobotImageAugmentations()
+        augmentor.do_image_augmentations(raw_model_df)
+        aug_model_df = get_robot_aug_df()
+        model_df = pd.concat([aug_model_df, test_df])
+    print('done')
+
+    trainer = robot_external_test_model(model_df)
