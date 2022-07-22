@@ -43,7 +43,7 @@ def robot_train_fastai_model_classification(model_df, count):
                                    item_tfms=None,
                                    batch_tfms=Resize(255,255),
                                    y_block=CategoryBlock(),
-                                   bs=16,
+                                   bs=8,
                                    shuffle=True)
     metrics = [error_rate, accuracy]
     learn = vision_learner(dls, args.model, metrics=metrics)
