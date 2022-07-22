@@ -41,13 +41,13 @@ def robot_train_fastai_model_classification(model_df, count):
                                    label_col=1,
                                    valid_col=2,
                                    item_tfms=None,
-                                   batch_tfms=Resize(224,224),
+                                   batch_tfms=Resize(255,255),
                                    y_block=CategoryBlock(),
                                    bs=8,
                                    shuffle=True)
     metrics = [error_rate, accuracy]
     learn = vision_learner(dls, args.model, metrics=metrics)
-    learn.fine_tune(10, cbs=[SaveModelCallback(monitor='valid_loss', fname=f'./{args.no_augs}_best_cbs.pth'),
+    learn.fine_tune(15, cbs=[SaveModelCallback(monitor='valid_loss', fname=f'./{args.no_augs}_best_cbs.pth'),
                             ReduceLROnPlateau(monitor='valid_loss',
                                               min_delta=0.1,
                                               patience=3),
