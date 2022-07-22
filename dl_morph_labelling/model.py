@@ -89,17 +89,17 @@ def robot_kfold_fastai(robot_df, n_splits):
             model_df = pd.concat([aug_model_df, val_df])
 
         trainer = robot_train_fastai_model_classification(model_df, count)
-        model = load_learner(f'./dl_morph_labelling/checkpoints/models/{args.model}/trained_model_{args.no_augs}_{count}.pkl', cpu=False)
-        best_metrics.append(model.final_record)
+        trainer = load_learner(f'./dl_morph_labelling/checkpoints/models/{args.model}/trained_model_{args.no_augs}_{count}.pkl', cpu=False)
+        best_metrics.append(trainer.final_record)
 
         if args.robot_test:
             path = './dl_morph_labelling/external_test_robot'
 
-            model = load_learner(
+            trainer = load_learner(
                 f'./dl_morph_labelling/checkpoints/models/{args.model}/trained_model_{args.no_augs}_{count}.pkl',
                 cpu=False)
-            test_dl = model.dls.test_dl(get_robot_external_set(), with_labels=True)
-            preds, _, decoded = model.get_preds(dl=test_dl, with_decoded=True)
+            test_dl = trainer.dls.test_dl(get_robot_external_set(), with_labels=True)
+            preds, _, decoded = trainer.get_preds(dl=test_dl, with_decoded=True)
             print(accuracy_score(_, decoded))
             test_metrics.append(accuracy_score(_, decoded))
 
