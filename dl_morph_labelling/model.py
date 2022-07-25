@@ -46,7 +46,7 @@ def robot_train_fastai_model_classification(model_df, count):
                                    bs=32,
                                    shuffle=True)
     metrics = [error_rate, accuracy]
-    learn = vision_learner(dls, args.model, metrics=metrics)
+    learn = vision_learner(dls, args.model, metrics=metrics, lr=0.0001)
     learn.fine_tune(10, cbs=[SaveModelCallback(monitor='valid_loss', fname=f'./{args.no_augs}_best_cbs.pth'),
                             ReduceLROnPlateau(monitor='valid_loss',
                                               min_delta=0.1,
