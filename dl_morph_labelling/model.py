@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.metrics import roc_auc_score, accuracy_score, f1_score
+from sklearn.metrics import roc_auc_score, accuracy_score, f1_score, confusion_matrix
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import os
@@ -43,7 +43,7 @@ def robot_train_fastai_model_classification(model_df, count):
                                    item_tfms=None,
                                    batch_tfms=Resize(255,255),
                                    y_block=CategoryBlock(),
-                                   bs=8,
+                                   bs=32,
                                    shuffle=True)
     metrics = [error_rate, accuracy]
     learn = vision_learner(dls, args.model, metrics=metrics)
@@ -99,9 +99,12 @@ def robot_kfold_fastai(robot_df, n_splits):
                 f'./dl_morph_labelling/checkpoints/models/{args.model}/trained_model_{args.no_augs}_{count}.pkl',
                 cpu=False)
             test_dl = trainer.dls.test_dl(get_robot_external_set(), with_labels=True)
-            preds, _, decoded = trainer.get_preds(dl=test_dl, with_decoded=True)
-            print(accuracy_score(_, decoded))
-            test_metrics.append(accuracy_score(_, decoded))
+            preds, actual, decoded = trainer.get_preds(dl=test_dl, with_decoded=True)
+            print(accuracy_score(actual, decoded))
+            test_metrics.append(accuracy_score(actual, decoded))
+            conf_mat = confusion_matrix(_, decoded)
+            print(f'Confusion matrix = {conf_mat}')
+
 
         count += 1
 
