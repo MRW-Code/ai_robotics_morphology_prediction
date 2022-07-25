@@ -43,7 +43,7 @@ def robot_train_fastai_model_classification(model_df, count):
                                    fn_col=0,
                                    label_col=1,
                                    valid_col=2,
-                                   item_tfms=None,
+                                   item_tfms=Resize(224),
                                    batch_tfms=None,
                                    y_block=CategoryBlock(),
                                    bs=16,
