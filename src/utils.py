@@ -21,6 +21,6 @@ parser.add_argument('--robot_test', action='store_true', dest='robot_test', defa
 parser.add_argument('--gpu_idx', action='store', dest='gpu_idx', default='0',
                   choices=['0', '1', '2', '3', '4', '5'])
 parser.add_argument('-m', '--model', action='store', dest='model', default='resnet18',
-                  choices=['resnet18', 'convnext_tiny_in22k', 'vit_small_patch16_224'])
+                  choices=['resnet18', 'convnext_tiny_in22k'])
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_idx
