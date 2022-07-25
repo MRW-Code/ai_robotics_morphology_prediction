@@ -102,7 +102,7 @@ def robot_kfold_fastai(robot_df, n_splits):
             preds, actual, decoded = trainer.get_preds(dl=test_dl, with_decoded=True)
             print(accuracy_score(actual, decoded))
             test_metrics.append(accuracy_score(actual, decoded))
-            conf_mat = confusion_matrix(_, decoded)
+            conf_mat = confusion_matrix(actual, decoded)
             print(f'Confusion matrix = {conf_mat}')
 
 
