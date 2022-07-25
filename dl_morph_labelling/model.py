@@ -10,6 +10,7 @@ from fastai.vision.all import *
 from src.utils import args
 from dl_morph_labelling.robot_image_augmentation import RobotImageAugmentations
 
+
 def get_robot_aug_df():
     print('GETTING ROBOT AUG DF')
     image_dir = f'./dl_morph_labelling/images/aug_images'
@@ -19,6 +20,7 @@ def get_robot_aug_df():
                              'label': labels})
     model_df['is_valid'] = 0
     return model_df
+
 
 def get_robot_external_set():
     print('LOADING EXTERNAL TEST SET')
@@ -35,23 +37,24 @@ def get_robot_external_set():
 
     return external_df[external_df.label != 'misc']
 
+
 def robot_train_fastai_model_classification(model_df, count):
     dls = ImageDataLoaders.from_df(model_df,
                                    fn_col=0,
                                    label_col=1,
                                    valid_col=2,
                                    item_tfms=None,
-                                   batch_tfms=Resize(255,255),
+                                   batch_tfms=None,
                                    y_block=CategoryBlock(),
                                    bs=32,
                                    shuffle=True)
     metrics = [error_rate, accuracy]
     learn = vision_learner(dls, args.model, metrics=metrics, lr=0.0001)
-    learn.fine_tune(10, cbs=[SaveModelCallback(monitor='valid_loss', fname=f'./{args.no_augs}_best_cbs.pth'),
-                            ReduceLROnPlateau(monitor='valid_loss',
-                                              min_delta=0.1,
-                                              patience=3),
-                             EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=10)])
+    learn.fine_tune(15, cbs=[SaveModelCallback(monitor='valid_loss', fname=f'./{args.no_augs}_best_cbs.pth'),
+                             ReduceLROnPlateau(monitor='valid_loss',
+                                               min_delta=0.1,
+                                               patience=3),
+                             EarlyStoppingCallback(monitor='accuracy', min_delta=0.1, patience=15)])
 
     os.makedirs(f'./dl_morph_labelling/checkpoints/figures/{args.model}', exist_ok=True)
     interp = ClassificationInterpretation.from_learner(learn)
@@ -60,6 +63,7 @@ def robot_train_fastai_model_classification(model_df, count):
 
     print(learn.validate())
     learn.export(f'./dl_morph_labelling/checkpoints/models/{args.model}/trained_model_{args.no_augs}_{count}.pkl')
+
 
 def robot_kfold_fastai(robot_df, n_splits):
     print(f'Training Robot FastAI model with no_augs = {args.no_augs}')
@@ -89,7 +93,8 @@ def robot_kfold_fastai(robot_df, n_splits):
             model_df = pd.concat([aug_model_df, val_df])
 
         trainer = robot_train_fastai_model_classification(model_df, count)
-        trainer = load_learner(f'./dl_morph_labelling/checkpoints/models/{args.model}/trained_model_{args.no_augs}_{count}.pkl', cpu=False)
+        trainer = load_learner(
+            f'./dl_morph_labelling/checkpoints/models/{args.model}/trained_model_{args.no_augs}_{count}.pkl', cpu=False)
         best_metrics.append(trainer.final_record)
 
         if args.robot_test:
@@ -105,9 +110,7 @@ def robot_kfold_fastai(robot_df, n_splits):
             conf_mat = confusion_matrix(actual, decoded)
             print(f'Confusion matrix = {conf_mat}')
 
-
         count += 1
-        exit()
 
     print(best_metrics)
     print(f'mean valid acc = {np.mean([best_metrics[x][2] for x in range(n_splits)])}')
