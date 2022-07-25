@@ -28,21 +28,32 @@ import seaborn as sns
 cf_matrix = [[int(71), int(11), int(18)],
              [int(4), int(57), int(9)],
              [int(16), int(2), int(12)]]
+cf_matrix2 = [[int(71), int(11), int(18)],
+             [int(4), int(57), int(9)],
+             [int(16), int(2), int(12)]]
 
-ax = sns.heatmap(cf_matrix, annot=True, cmap='Blues', fmt='g')
+test = [cf_matrix, cf_matrix2]
 
-# ax.set_title('ResNet18')
-ax.set_title('ConvNeXt Tiny')
 
-ax.set_xlabel('Predicted')
-ax.set_ylabel('Actual ');
+print(np.sum(test, axis=0))
 
-## Ticket labels - List must be in alphabetical order
-ax.xaxis.set_ticklabels(['Block','Needle', 'Plate'])
-ax.yaxis.set_ticklabels(['Block','Needle', 'Plate'])
+# total = np.add(cf_matrix, cf_matrix2)
+# print(total)
 
-## Display the visualization of the Confusion Matrix.
-# plt.savefig('/home/matthew/Documents/particle_flow_logs/confmat_resnet.png')
-# plt.savefig('/home/matthew/Documents/particle_flow_logs/confmat_convnext.png')
-
-plt.show()
+# ax = sns.heatmap(cf_matrix, annot=True, cmap='Blues', fmt='g')
+#
+# # ax.set_title('ResNet18')
+# ax.set_title('ConvNeXt Tiny')
+#
+# ax.set_xlabel('Predicted')
+# ax.set_ylabel('Actual ');
+#
+# ## Ticket labels - List must be in alphabetical order
+# ax.xaxis.set_ticklabels(['Block','Needle', 'Plate'])
+# ax.yaxis.set_ticklabels(['Block','Needle', 'Plate'])
+#
+# ## Display the visualization of the Confusion Matrix.
+# # plt.savefig('/home/matthew/Documents/particle_flow_logs/confmat_resnet.png')
+# # plt.savefig('/home/matthew/Documents/particle_flow_logs/confmat_convnext.png')
+#
+# plt.show()

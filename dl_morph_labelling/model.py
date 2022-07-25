@@ -74,6 +74,7 @@ def robot_kfold_fastai(robot_df, n_splits):
     count = 0
     best_metrics = []
     test_metrics = []
+    all_mat = []
     for train_index, val_index in tqdm(kfold.split(paths, labels)):
         X_train, X_val = paths[train_index], paths[val_index]
         y_train, y_val = labels[train_index], labels[val_index]
@@ -108,6 +109,7 @@ def robot_kfold_fastai(robot_df, n_splits):
             print(accuracy_score(actual, decoded))
             test_metrics.append(accuracy_score(actual, decoded))
             conf_mat = confusion_matrix(actual, decoded)
+            all_mat.append(conf_mat)
             print(f'Confusion matrix = {conf_mat}')
 
         count += 1
@@ -115,5 +117,7 @@ def robot_kfold_fastai(robot_df, n_splits):
     print(best_metrics)
     print(f'mean valid acc = {np.mean([best_metrics[x][2] for x in range(n_splits)])}')
     print(f'mean test acc = {np.mean(test_metrics)}')
+    print('total conf mat...')
+    print(np.sum(all_mat, axis=0))
     return None
 
