@@ -107,6 +107,7 @@ def robot_kfold_fastai(robot_df, n_splits):
 
 
         count += 1
+        exit()
 
     print(best_metrics)
     print(f'mean valid acc = {np.mean([best_metrics[x][2] for x in range(n_splits)])}')
