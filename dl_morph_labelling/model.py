@@ -39,11 +39,21 @@ def get_robot_external_set():
 
 
 def robot_train_fastai_model_classification(model_df, count):
+
+    tfms = {'resnet18': None,
+            'convnext_tiny_in22k': None,
+            'convnext_tiny': None,
+            'vit_tiny_patch16_244': Resize(244),
+            'vit_tiny_patch16_384': Resize(384),
+            'swinv2_tiny_window16_256': Resize(256),
+            'swinv2_tiny_window8_256': Resize(256),
+            }
+
     dls = ImageDataLoaders.from_df(model_df,
                                    fn_col=0,
                                    label_col=1,
                                    valid_col=2,
-                                   item_tfms=Resize(255),
+                                   item_tfms=tfms[args.model],
                                    batch_tfms=None,
                                    y_block=CategoryBlock(),
                                    bs=8,
