@@ -25,4 +25,6 @@ parser.add_argument('-m', '--model', action='store', dest='model', default='resn
                            'vit_tiny_patch16_224', 'vit_tiny_patch16_384', 'swinv2_tiny_window16_256',
                            'swinv2_tiny_window8_256', 'convnext_tiny', 'efficientnet_l2'])
 args = parser.parse_args()
+
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_idx
