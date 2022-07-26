@@ -43,7 +43,7 @@ def robot_train_fastai_model_classification(model_df, count):
     tfms = {'resnet18': None,
             'convnext_tiny_in22k': None,
             'convnext_tiny': None,
-            'vit_tiny_patch16_244': Resize(244),
+            'vit_tiny_patch16_224': Resize(224),
             'vit_tiny_patch16_384': Resize(384),
             'swinv2_tiny_window16_256': Resize(256),
             'swinv2_tiny_window8_256': Resize(256),
