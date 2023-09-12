@@ -1,6 +1,5 @@
 # Introduction
-This project aims to assess how accurate one can be in predicting pharmaceutical crystal morphologies using machine
-learning and open source data from the Cambridge Structural Database (CSD).
+This repository is the code accompanying the manuscript "Predicting pharmaceutical crystal morphology using artificial intelligence" published in RSC CrystEngComm (<https://doi.org/10.1039/D2CE00992G>) and winner of the CrystEngComm Article of the Year award 2022.
 
 # Env Set Up
 Project was built using python 3.6 and a virtual environment. Previously RDKit needed conda but given this is no longer the case, venv was used. The requirements install was correct at the time of making, but please check your pytorch install versions especially if you plan to use a gpu! The install for the pip version of RDKit is shown on the final line of these instructions, this should install automatically from requirements.txt but is included for reference.
@@ -37,7 +36,7 @@ python3 lab_data_main.py [options]
 ```
 
 ## Robot labelling
-The labelling for the robot runs from `robot_main.py`. Currently uses a cross val approach to see if it would work, but for proper deployment this will need to be ammended. Further work is happening on this within the groupn and will be made available when possible. 
+The labelling for the robot runs from `robot_main.py`. The code in this file uses a kfold approach to train a deep learning model, but this has since been extended to allow the system to run in real time. For the real time system please visit the published manuscript (<https://doi.org/10.1016/j.engappai.2023.106985>) or the code reposiitory (<https://github.com/MRW-Code/ros_morphology_robot>).
 ```
 python3 robot_main.py [options]
 ```
