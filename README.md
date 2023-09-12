@@ -1,5 +1,5 @@
 # Introduction
-This repository is the code accompanying the manuscript "Predicting pharmaceutical crystal morphology using artificial intelligence" published in RSC CrystEngComm (<https://doi.org/10.1039/D2CE00992G>) and winner of the CrystEngComm Article of the Year award 2022.
+This repository is the code accompanying the manuscript "Predicting pharmaceutical crystal morphology using artificial intelligence" published in RSC CrystEngComm (<https://doi.org/10.1039/D2CE00992G>) and winner of the CrystEngComm Article of the Year award 2022. If this work has proved useful, then I ask that you consider citing the orgininal paper.
 
 # Env Set Up
 Project was built using python 3.6 and a virtual environment. Previously RDKit needed conda but given this is no longer the case, venv was used. The requirements install was correct at the time of making, but please check your pytorch install versions especially if you plan to use a gpu! The install for the pip version of RDKit is shown on the final line of these instructions, this should install automatically from requirements.txt but is included for reference.
